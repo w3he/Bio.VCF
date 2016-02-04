@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +34,7 @@ namespace Bio.VCF
         public ListAndSetHash(AbstractVCFCodec baseCodec)
         {
             parentCodec = baseCodec;
-            ListAndHash passList = new ListAndHash() { List = new List<string>().AsReadOnly(), Hash = new ImmutableHashSet<string>() };
+            ListAndHash passList = new ListAndHash() { List = new List<string>().AsReadOnly(), Hash = ImmutableHashSet.Create<string>() };
             _strToListAndHash[VCFConstants.PASSES_FILTERS_v3] = passList;
             _strToListAndHash[VCFConstants.PASSES_FILTERS_v4] = passList;
         }
@@ -51,7 +52,7 @@ namespace Bio.VCF
             }
             var list = fFields.AsReadOnly();
             var hash = (from x in _strToListAndHash.Values where x.Hash.SetEquals(list) select x.Hash).FirstOrDefault() ??
-                       new ImmutableHashSet<string>(list);
+                       ImmutableHashSet.Create<string>().Union(list);
             ListAndHash toAdd = new ListAndHash() { List = list, Hash = hash };
             _strToListAndHash[filterString] = toAdd;
             return toAdd;

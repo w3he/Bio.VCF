@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
 namespace Bio.VCF
@@ -70,7 +71,7 @@ namespace Bio.VCF
 		{
 			get
 			{
-                return filters == null ? NO_FILTERS : new ImmutableHashSet<string>();
+                return filters == null ? NO_FILTERS : ImmutableHashSet.Create<string>();
 			}
 		}
 
