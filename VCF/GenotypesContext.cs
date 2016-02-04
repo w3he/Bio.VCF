@@ -144,6 +144,7 @@ namespace Bio.VCF
         protected internal GenotypesContext(int n)
             : this(new List<Genotype>(n))
         {
+            Mutable = true;
         }
 
         /// <summary>
@@ -215,7 +216,8 @@ namespace Bio.VCF
         {
             if (sampleNameToOffset == null)
             {
-                Enumerable.Range(0, Count).ToDictionary(o => new KeyValuePair<string, int>(Genotypes[o].SampleName, o));
+                sampleNameToOffset = Enumerable.Range(0, Count).ToDictionary(o => Genotypes[o].SampleName);
+                 
             }
         }
 

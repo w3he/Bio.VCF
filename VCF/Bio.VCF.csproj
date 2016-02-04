@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F7213ADD-1C0C-434F-9A32-7F6C31671A89}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bio.VCF</RootNamespace>
+    <AssemblyName>Bio.VCF</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Mono</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractVCFCodec.cs" />
+    <Compile Include="Allele.cs" />
+    <Compile Include="CommonInfo.cs" />
+    <Compile Include="FastGenotype.cs" />
+    <Compile Include="FastStringUtils.cs" />
+    <Compile Include="GeneralUtils.cs" />
+    <Compile Include="Genotype.cs" />
+    <Compile Include="GenotypeBuilder.cs" />
+    <Compile Include="GenotypeLikelihoods.cs" />
+    <Compile Include="GenotypesContext.cs" />
+    <Compile Include="GenotypeType.cs" />
+    <Compile Include="IFeature.cs" />
+    <Compile Include="LazyGenotypesContext.cs" />
+    <Compile Include="NewCollections\Extensions.cs" />
+    <Compile Include="NewCollections\ImmutableHashSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewCollections\LinkedHashSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewCollections\ListAndSetHash.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewCollections\OrderedGenericDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParsingUtils.cs" />
+    <Compile Include="VariantContext.cs" />
+    <Compile Include="VariantContextAccessMethods.cs" />
+    <Compile Include="VariantContextBuilder.cs" />
+    <Compile Include="VariantContextStatics.cs" />
+    <Compile Include="VariantContextUtils.cs" />
+    <Compile Include="VCF3Codec.cs" />
+    <Compile Include="VCFCodec.cs" />
+    <Compile Include="VCFCompoundHeaderLine.cs" />
+    <Compile Include="VCFConstants.cs" />
+    <Compile Include="VCFContigHeaderLine.cs" />
+    <Compile Include="VCFFilterHeaderLine.cs" />
+    <Compile Include="VCFFormatHeaderLine.cs" />
+    <Compile Include="VCFHeader.cs" />
+    <Compile Include="VCFHeaderLine.cs" />
+    <Compile Include="VCFHeaderLineCount.cs" />
+    <Compile Include="VCFHeaderLineTranslator.cs" />
+    <Compile Include="VCFHeaderLineType.cs" />
+    <Compile Include="VCFHeaderVersion.cs" />
+    <Compile Include="VCFIDHeaderLine.cs" />
+    <Compile Include="VCFInfoHeaderLine.cs" />
+    <Compile Include="VCFParser.cs" />
+    <Compile Include="VCFParsingError.cs" />
+    <Compile Include="VCFSimpleHeaderLine.cs" />
+    <Compile Include="VCFStandardHeaderLines.cs" />
+    <Compile Include="VCFUtils.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Writer\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

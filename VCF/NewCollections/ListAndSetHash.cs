@@ -25,14 +25,14 @@ namespace Bio.VCF
         /// <summary>
         /// Map of unparsed strings to IList
         /// </summary>
-        private Dictionary<string, ListAndHash> _strToListAndHash = new Dictionary<string, ListAndHash>();
+        private IDictionary<string, ListAndHash> _strToListAndHash = new Dictionary<string, ListAndHash>();
         /// <summary>
         /// Constructor used to get the codec and map from these things 
         /// </summary>
         /// <param name="baseCodec">The base codec, necessary to get the string cache from</param>
         public ListAndSetHash(AbstractVCFCodec baseCodec)
         {
-            this.parentCodec = baseCodec;
+            parentCodec = baseCodec;
             ListAndHash passList = new ListAndHash() { List = new List<string>().AsReadOnly(), Hash = new ImmutableHashSet<string>() };
             _strToListAndHash[VCFConstants.PASSES_FILTERS_v3] = passList;
             _strToListAndHash[VCFConstants.PASSES_FILTERS_v4] = passList;
@@ -43,17 +43,15 @@ namespace Bio.VCF
             // otherwise we have to parse and cache the value
             if (filterString.IndexOf(VCFConstants.FILTER_CODE_SEPARATOR) == -1)
             {
-                fFields = new List<string>(1);
-                fFields.Add(filterString);
+                fFields = new List<string>() {filterString};
             }
             else
             {
                 fFields = (from x in filterString.Split(VCFConstants.FILTER_CODE_SEPARATOR_CHAR_ARRAY, StringSplitOptions.RemoveEmptyEntries) select parentCodec.GetCachedString(x)).ToList();
             }
             var list = fFields.AsReadOnly();
-            var hash = (from x in _strToListAndHash.Values where x.Hash.SetEquals(list) select x.Hash).FirstOrDefault();
-            if (hash == null)
-                hash = new ImmutableHashSet<string>(list);
+            var hash = (from x in _strToListAndHash.Values where x.Hash.SetEquals(list) select x.Hash).FirstOrDefault() ??
+                       new ImmutableHashSet<string>(list);
             ListAndHash toAdd = new ListAndHash() { List = list, Hash = hash };
             _strToListAndHash[filterString] = toAdd;
             return toAdd;
@@ -63,17 +61,13 @@ namespace Bio.VCF
             get
             {
                 if (filterString == VCFConstants.UNFILTERED)
-                { return null; }
+                {
+                    return null;
+                }
+
                 ListAndHash toReturn;
                 bool val = _strToListAndHash.TryGetValue(filterString, out toReturn);
-                if (!val)
-                {
-                    return createNewCachedFilter(filterString);
-                }
-                else
-                {
-                    return toReturn;
-                }
+                return !val ? createNewCachedFilter(filterString) : toReturn;
             }
            
 

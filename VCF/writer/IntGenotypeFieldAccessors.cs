@@ -82,7 +82,7 @@ namespace org.broadinstitute.variant.variantcontext.writer
 			}
 		}
 
-		private abstract class AtomicAccessor : Accessor
+        public abstract class AtomicAccessor : Accessor
 		{
 			private readonly int[] singleton = new int[1];
 

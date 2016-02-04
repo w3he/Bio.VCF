@@ -241,6 +241,10 @@ namespace Bio.VCF
                 {
                     contigMetaData.Add((VCFContigHeaderLine)line);
                 }
+                else if (line is VCFSimpleHeaderLine)
+                {
+                    mOtherMetaData[((VCFSimpleHeaderLine) line).ID] = line;
+                }
                 else
                 {
                     mOtherMetaData[line.Key] = line;

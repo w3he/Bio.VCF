@@ -186,7 +186,7 @@ namespace Bio.VCF
 					bool badCountType = line.CountType != standard.CountType;
 					bool badCount = line.FixedCount && !badCountType && line.Count != standard.Count;
 					bool badType = line.Type != standard.Type;
-					bool badDesc = !line.Description.Equals(standard.Description);
+					bool badDesc = !line.Description.Equals(standard.Description, StringComparison.InvariantCultureIgnoreCase);
 					bool needsRepair = badCountType || badCount || badType || (REPAIR_BAD_DESCRIPTIONS && badDesc);
 
                     //TODO: This is ridiculous, shouldn't the fields be standardized or not??

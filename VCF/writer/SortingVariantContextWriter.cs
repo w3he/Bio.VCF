@@ -50,7 +50,7 @@ namespace org.broadinstitute.variant.variantcontext.writer
 			this.maxCachingStartDistance = maxCachingStartDistance;
 		}
 
-		public SortingVariantContextWriter(VariantContextWriter innerWriter, int maxCachingStartDistance) : this(innerWriter, maxCachingStartDistance, false); / / by default, don't own inner
+		public SortingVariantContextWriter(VariantContextWriter innerWriter, int maxCachingStartDistance) : this(innerWriter, maxCachingStartDistance, false) // by default, don't own inner
 		{
 		}
 

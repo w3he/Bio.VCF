@@ -18,9 +18,13 @@ namespace Bio.VCF
 		/// Setting this to true causes the VCF/BCF/VariantContext classes to emit debugging information
 		/// to standard error
 		/// </summary>
-		public const bool DEBUG_MODE_ENABLED = false;
+#if DEBUG
+        public static bool DEBUG_MODE_ENABLED = false;
+#else
+        public static bool DEBUG_MODE_ENABLED = false;
+#endif
 
-		/// <summary>
+        /// <summary>
 		/// The smallest log10 value we'll emit from normalizeFromLog10 and other functions
 		/// where the real-space value is 0.0.
 		/// </summary>

@@ -44,6 +44,9 @@ namespace Bio.VCF.NewCollections
             if (source == null) throw new ArgumentNullException("source");
             if (selector == null) throw new ArgumentNullException("selector");
             if (comparer == null) throw new ArgumentNullException("comparer");
+
+            if (!source.Any()) return default(TSource);
+
             using (var sourceIterator = source.GetEnumerator())
             {
                 if (!sourceIterator.MoveNext())

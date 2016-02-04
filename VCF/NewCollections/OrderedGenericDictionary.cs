@@ -22,8 +22,12 @@ namespace Bio.VCF
             if (!_dict.ContainsKey(key))
             {
                 _insertOrder.Add(key);
+                _dict.Add(key, value);
             }
-            _dict.Add(key, value);
+            else
+            {
+                Console.WriteLine("Duplicate: {{ key: '{0}', values: ['{1}', '{2}'] }}",key, _dict[key], value);
+            }
         }
         public void putAll(IDictionary<KeyT, ValueT> toAdd)
         {

@@ -79,7 +79,7 @@ namespace org.broadinstitute.variant.variantcontext.writer
 			this.mostUpstreamWritableLoc = BEFORE_MOST_UPSTREAM_LOC;
 		}
 
-		public SortingVariantContextWriterBase(VariantContextWriter innerWriter) : this(innerWriter, false); / / by default, don't own inner
+		public SortingVariantContextWriterBase(VariantContextWriter innerWriter) : this(innerWriter, false) // by default, don't own inner
 		{
 		}
 
