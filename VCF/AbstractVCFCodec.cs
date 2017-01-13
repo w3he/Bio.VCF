@@ -305,12 +305,7 @@ namespace Bio.VCF
 				builder.SetGenotypes (lazy, false);
 			}
 
-			VariantContext vc = null;
-			try {
-				vc = builder.make ();
-			} catch (Exception e) {
-				generateException (e.Message);
-			}
+		    var vc = builder.make ();
 			return vc;
 		}
 

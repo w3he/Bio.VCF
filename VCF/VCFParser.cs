@@ -125,21 +125,14 @@ namespace Bio.VCF
         }
         public bool MoveNext()
         {
-            try
+            line = reader.ReadLine();
+            if (line == null)
+                return false;
+            else
             {
-                line = reader.ReadLine();
-                if (line == null)
-                    return false;
-                else
-                {
-                    pCurrent= vcfCodec.decode(line);
-                    line = null;
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new VCFParsingError("Error getting next VCF Line", e);
+                pCurrent= vcfCodec.decode(line);
+                line = null;
+                return true;
             }
         }
         public void Reset()

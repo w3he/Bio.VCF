@@ -25,5 +25,6 @@ Examples:
 | GHDX39.vcf                            |
 | GHDX40.vcf                            |
 | GHDX41.vcf                            |
-
+| empty.vcf								|
+| general.vcf							|
 

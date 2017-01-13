@@ -10,3 +10,10 @@ bin/*
 *.pfx
 !library/*
 *.vsp
+/.vs
+/packages
+*.csproj.vspscc
+*.csproj.user
+*.suo
+TestVCF/testData/*.vcf
+TestVCF/testData/ghdx.txt

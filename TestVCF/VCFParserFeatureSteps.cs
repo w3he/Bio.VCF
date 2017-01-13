@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -13,10 +14,19 @@ namespace Bio.VCF.Test
         private string VcfFile { get; set; }
         private VCFParser Vcp { get; set; }
 
+        public VCFParserFeatureSteps()
+        {
+            Console.WriteLine($"cwd: {Directory.GetCurrentDirectory()}");
+            //reset the current working directory
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+            Console.WriteLine($"cwd: {Directory.GetCurrentDirectory()}");
+        }
+
         [Given(@"A VCF file, (.*)")]
         public void GivenAVCFFile(string file)
         {
-            VcfFile = Path.Combine("testData\\", file);
+            Console.WriteLine($"cwd: {Directory.GetCurrentDirectory()}");
+            VcfFile = Path.Combine("testData", file);
             //ScenarioContext.Current.Pending();
 
             Assert.IsTrue(File.Exists(VcfFile));
@@ -36,7 +46,10 @@ namespace Bio.VCF.Test
         [Then(@"count the number of variants in the file")]
         public void ThenCountTheNumberOfVariantsInTheFile()
         {
-            //ScenarioContext.Current.Pending();
+            var fusions = new HashSet<string>();
+            var cnvGains = new HashSet<string>();
+            var cnvLosses = new HashSet<string>();
+
             foreach (var variant in Vcp)
             {
                 var gc = variant.Genotypes.Count;
@@ -51,14 +64,37 @@ namespace Bio.VCF.Test
                     variant.Type, gc, ac, variant.Chr, variant.Start, variant.End, JsonConvert.SerializeObject(variant.Attributes));
                 Console.WriteLine();
 
-                if (variant.HasAttribute("FUSIONENTREZ"))
+                if (variant.Type == VariantContext.VariantType.SYMBOLIC)
                 {
-                    Console.WriteLine("FUSION ENTREZ: '{0}'", variant.Attributes["FUSIONENTREZ"]);
-                }
+                    if (variant.HasAttribute("CNVSYMBOL"))
+                    {
+                        if (variant.HasAttribute("SVTYPE"))
+                        {
+                            switch ((string) variant.Attributes["SVTYPE"])
+                            {
+                                case "DUP":
+                                    cnvGains.Add(variant.Attributes["CNVSYMBOL"] as string);
+                                    break;
+                                case "DEL":
+                                    cnvLosses.Add(variant.Attributes["CNVSYMBOL"] as string);
+                                    break;
+                                default:
+                                    throw new ApplicationException("Unexpected SVTYPE: " + variant.Attributes["SVTYPE"]);
+                                    break;
+                            }
+                        }
 
-                if (variant.HasAttribute("FUSIONSYMBOL"))
-                {
-                    Console.WriteLine("FUSION SYMBOL: '{0}'", variant.Attributes["FUSIONSYMBOL"]);
+                        Console.WriteLine("{0}: {1} / {2}", variant.Type, variant.Attributes["CNVSYMBOL"],
+                            variant.HasAttribute("SVTYPE") ? variant.Attributes["SVTYPE"] : variant.Attributes["VTYPE"]);
+                    }
+
+                    if (variant.HasAttribute("FUSIONSYMBOL"))
+                    {
+                        string fusion = (string) variant.Attributes["FUSIONSYMBOL"];
+                        fusions.Add(fusion);
+                        Console.WriteLine("FUSION SYMBOL: '{0}'", variant.Attributes["FUSIONSYMBOL"]);
+                    }
+
                 }
 
                 Console.WriteLine("Genotypes:");
@@ -95,6 +131,21 @@ namespace Bio.VCF.Test
             var i = Vcp.Select(x => x.NoCallCount).Count();
 
             Console.WriteLine("No calls: {0}", i);
+
+            foreach (var pair in fusions)
+            {
+                Console.WriteLine("Gene fusions: {0}", pair);
+            }
+
+            foreach (var cnv in cnvGains)
+            {
+                Console.WriteLine("GAINS: {0}", cnv);
+            }
+
+            foreach (var cnv in cnvLosses)
+            {
+                Console.WriteLine("LOSSES: {0}", cnv);
+            }
 
         }
     }

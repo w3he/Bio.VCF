@@ -158,7 +158,7 @@ namespace Bio.VCF
 		protected internal Allele(Allele allele, bool ignoreRefState)
 		{
 			this.bases = allele.bases;
-			this.isRef = ignoreRefState ? false : allele.isRef;
+			this.isRef = !ignoreRefState && allele.isRef;
 			this.isNoCall = allele.isNoCall;
 			this.isSymbolic = allele.isSymbolic;
 		}
@@ -174,7 +174,11 @@ namespace Bio.VCF
 		private static readonly Allele ALT_T = new Allele("T", false);
 		private static readonly Allele REF_N = new Allele("N", true);
 		private static readonly Allele ALT_N = new Allele("N", false);
-		public static readonly Allele NO_CALL = new Allele(NO_CALL_STRING, false);
+
+        /// Per v4.2 spec, the ‘*’ allele is reserved to indicate that the allele is missing due to a upstream deletion.
+        /// If there are no alternative alleles, then the missing value should be used.
+        private static readonly Allele ALT_NULL = new Allele("*", false);
+        public static readonly Allele NO_CALL = new Allele(NO_CALL_STRING, false);
 
 		// ---------------------------------------------------------------------------------------------------------
 		//
@@ -222,7 +226,13 @@ namespace Bio.VCF
                     case (byte)'N':
                     case (byte)'n':
 					    return isRef ? REF_N : ALT_N;
-					default:
+                    case (byte)'*':
+                        if (isRef)
+                        {
+                            throw new System.ArgumentException("Cannot use '*' as the reference allele");
+                        }
+                        return ALT_NULL;
+                    default:
 						throw new System.ArgumentException("Illegal base [" + (char)bases[0] + "] seen in the allele");
 				}
 			}
@@ -273,7 +283,11 @@ namespace Bio.VCF
 		/// <returns> true if the bases represent a symbolic allele </returns>
 		public static bool WouldBeSymbolicAllele(byte[] bases)
 		{
-			if (bases.Length <= 2)
+		    if (bases.Length == 1 && bases[0] == '*')
+		    {
+		        return true;
+		    }
+			else if (bases.Length <= 2)
 			{
 				return false;
 			}
