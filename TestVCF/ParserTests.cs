@@ -11,7 +11,7 @@ namespace Bio.VCF.Test
 
         public ParserTests()
         {
-            
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
         }
 
         [SetUp]
