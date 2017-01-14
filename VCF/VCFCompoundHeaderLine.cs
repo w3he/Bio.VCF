@@ -205,7 +205,7 @@ namespace Bio.VCF
 
 		private void validate()
 		{
-			if (name == null || Type == null || description == null || lineType == null)
+			if (name == null || description == null)
 			{
 				throw new System.ArgumentException(string.Format("Invalid VCFCompoundHeaderLine: key={0} name={1} type={2} desc={3} lineType={4}", base.Key, name, type, description, lineType));
 			}

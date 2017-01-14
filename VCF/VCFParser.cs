@@ -17,27 +17,27 @@ namespace Bio.VCF
 		private readonly StreamReader reader;
         private string line = null;
         private VariantContext pCurrent;
-        private string fileName;
+        public FileInfo VcfFile { get; set; }
         // TODO: Add a c'tor that reads intervals.
         public VCFParser(FileInfo vcfFile)
 		{
-            fileName = vcfFile.FullName;
+            VcfFile = vcfFile;
             if (vcfFile.Extension == ".gz")
             {
                 FileStream fs = vcfFile.OpenRead();
                 GZipStream gz = new GZipStream(fs, CompressionMode.Decompress);
-                this.reader = new StreamReader(gz);
+                reader = new StreamReader(gz);
             }
             else
             {
-                this.reader = new StreamReader(vcfFile.OpenRead(),System.Text.Encoding.ASCII,true,4000000);
+                reader = new StreamReader(vcfFile.OpenRead(),System.Text.Encoding.ASCII,true,4000000);
             }
 			VCFHeader header = vcfCodec.readHeader(reader);
-			if (!(header is VCFHeader))
+			if (header == null)
 			{
-				throw new System.ArgumentException("The file " + vcfFile.FullName + " did not have a VCF header");
+				throw new ApplicationException("The file " + vcfFile.FullName + " did not have a VCF header");
 			}
-			this.Header = header;
+			Header = header;
 		}
         
         public VCFParser(string fileName) :this(new FileInfo(fileName))
@@ -123,19 +123,19 @@ namespace Bio.VCF
         {
             get { return pCurrent; }
         }
-        public bool MoveNext()
-        {
-            line = reader.ReadLine();
-            if (line == null)
-                return false;
-            else
-            {
-                pCurrent= vcfCodec.decode(line);
-                line = null;
-                return true;
-            }
-        }
-        public void Reset()
+
+	    public bool MoveNext()
+	    {
+	        line = reader.ReadLine();
+	        if (line == null)
+	            return false;
+
+	        pCurrent = vcfCodec.decode(line);
+	        line = null;
+	        return true;
+	    }
+
+	    public void Reset()
         {
             throw new NotImplementedException();
         }
