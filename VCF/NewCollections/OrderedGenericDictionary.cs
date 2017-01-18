@@ -26,7 +26,8 @@ namespace Bio.VCF
             }
             else
             {
-                Console.WriteLine("Duplicate: {{ key: '{0}', values: ['{1}', '{2}'] }}",key, _dict[key], value);
+                //Console.WriteLine("Duplicate: {{ key: '{0}', values: ['{1}', '{2}'] }}",key, _dict[key], value);
+                throw new ApplicationException("Duplicate key: " + key);
             }
         }
         public void putAll(IDictionary<KeyT, ValueT> toAdd)
